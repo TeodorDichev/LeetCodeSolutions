@@ -2,9 +2,10 @@ class Solution {
 public:
     int maximumLength(vector<int>& nums, int k) {
     int longest = 0;
+    std::vector<int> dp(k);
 
     for (int val = 0; val < k; ++val) {
-        std::vector<int> dp(k, 0);
+        std::fill(dp.begin(), dp.end(), 0);
 
         for (int x : nums) {
             int m = x % k;
