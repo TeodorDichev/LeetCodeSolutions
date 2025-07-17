@@ -9,8 +9,7 @@ public:
         for (int x : nums) {
             int m = x % k;
             int want = (val - m + k) % k;
-            int best = dp[want];
-            dp[m] = std::max(dp[m], best + 1);
+            dp[m] = std::max(dp[m], dp[want] + 1);
             longest = std::max(longest, dp[m]);
         }
     }
