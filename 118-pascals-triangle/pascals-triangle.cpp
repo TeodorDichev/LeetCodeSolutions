@@ -1,21 +1,15 @@
 class Solution {
 public:
     vector<vector<int>> generate(int numRows) {
-        vector<vector<int>> result;
+        vector<vector<int>> result(numRows);
 
         for (int i = 0; i < numRows; ++i) {
-            vector<int> currRow;
-
             for(int j = 0; j <= i; ++j) {
-                if(i > 1 && j > 0 && j < i) {
-                    currRow.push_back(result[i-1][j-1] + result[i-1][j]);
-                }
-                else {
-                currRow.push_back(1);
-                }
+                if(i > 1 && j > 0 && j < i)
+                    result[i].push_back(result[i-1][j-1] + result[i-1][j]);
+                else
+                    result[i].push_back(1);
             }
-            
-            result.push_back(currRow);
         }
 
         return result;
