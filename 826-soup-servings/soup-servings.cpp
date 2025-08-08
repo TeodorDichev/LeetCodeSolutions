@@ -1,11 +1,11 @@
 class Solution {
 public:
-    double calculateDP(int i, int j, unordered_map<int, unordered_map<int, double>>& dp) {
+    double calculateDP(int i, int j, vector<vector<double>>& dp) {
         if (i <= 0 && j <= 0) return 0.5;
         if (i <= 0) return 1.0;
         if (j <= 0) return 0.0;
 
-        if (dp[i].count(j)) return dp[i][j];
+        if (dp[i][j] >= 0) return dp[i][j]; // already computed
 
         return dp[i][j] = (
             calculateDP(i - 4, j, dp) +
@@ -16,8 +16,10 @@ public:
     }
 
     double soupServings(int n) {
+        if (n > 4800) return 1.0;
         int m = ceil(n / 25.0);
-        unordered_map<int, unordered_map<int, double>> dp;
+
+        vector<vector<double>> dp(m + 1, vector<double>(m + 1, -1.0));
 
         for (int k = 1; k <= m; k++) {
             if (calculateDP(k, k, dp) > 1 - 1e-5) {
