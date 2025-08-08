@@ -1,25 +1,29 @@
 class Solution {
 public:
-    double soupServings(int n) {
-        if (n > 4800) return 1.0;
-        
-        vector<vector<double>> memo(n + 1, vector<double>(n + 1, -1.0));
-        return Rec(n, n, memo);
+    double calculateDP(int i, int j, unordered_map<int, unordered_map<int, double>>& dp) {
+        if (i <= 0 && j <= 0) return 0.5;
+        if (i <= 0) return 1.0;
+        if (j <= 0) return 0.0;
+
+        if (dp[i].count(j)) return dp[i][j];
+
+        return dp[i][j] = (
+            calculateDP(i - 4, j, dp) +
+            calculateDP(i - 3, j - 1, dp) +
+            calculateDP(i - 2, j - 2, dp) +
+            calculateDP(i - 1, j - 3, dp)
+        ) / 4.0;
     }
 
-    double Rec(int a, int b, vector<vector<double>>& memo) {
-        if (a <= 0 && b > 0) return 1.0;
-        if (a <= 0 && b <= 0) return 0.5;
-        if (a > 0 && b <= 0) return 0.0;
+    double soupServings(int n) {
+        int m = ceil(n / 25.0);
+        unordered_map<int, unordered_map<int, double>> dp;
 
-        if (memo[a][b] >= 0) return memo[a][b]; // Already computed
-
-        double res = 0;
-        res += Rec(max(0, a - 100), max(0, b),      memo);
-        res += Rec(max(0, a - 75),  max(0, b - 25), memo);
-        res += Rec(max(0, a - 50),  max(0, b - 50), memo);
-        res += Rec(max(0, a - 25),  max(0, b - 75), memo);
-
-        return memo[a][b] = 0.25 * res;
+        for (int k = 1; k <= m; k++) {
+            if (calculateDP(k, k, dp) > 1 - 1e-5) {
+                return 1.0;
+            }
+        }
+        return calculateDP(m, m, dp);
     }
 };
