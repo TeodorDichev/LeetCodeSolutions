@@ -1,27 +1,23 @@
 class Solution {
 public:
-    bool isPowerOfTwo(int n) {
-        return n > 0 && (n & (n - 1)) == 0;
+    long long getSign(int num, vector<int> primes) {
+        long long sign = 1;
+        while (num > 0) {
+            sign *= primes[num % 10];
+            num /= 10;
+        }
+        return sign;
     }
 
     bool reorderedPowerOf2(int n) {
-        // Extract digits
-        vector<int> digits;
-        while (n > 0) {
-            digits.push_back(n % 10);
-            n /= 10;
+        vector<int> primes = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29};
+        
+        long long targetSign = getSign(n, primes);
+        for (int i = 0; i < 31; i++) {
+            if (getSign(1 << i, primes) == targetSign) {
+                return true;
+            }
         }
-
-        sort(digits.begin(), digits.end());
-
-        do {
-            if (digits[0] == 0) continue;
-
-            int num = 0;
-            for (int d : digits) num = num * 10 + d;
-
-            if (isPowerOfTwo(num)) return true;
-        } while (next_permutation(digits.begin(), digits.end()));
 
         return false;
     }
