@@ -1,45 +1,35 @@
 class Solution {
 public:
     vector<int> productQueries(int n, vector<vector<int>>& queries) {
-        const int MOD = 1'000'000'007;
+        const int MOD = 1e9 + 7;
+        
+        int power = 1;
+        while (power <= n) power <<= 1;
+        power >>= 1;
 
-        vector<long long> bits;
-        for (int i = 0; n > 0; i++, n >>= 1) {
-            if (n & 1) {
-                bits.push_back(1LL << i);
+        vector<int> powers;
+        while (n > 0) {
+            if (power <= n) {
+                powers.push_back(power);
+                n -= power;
+            }
+            power >>= 1;
+        }
+
+        int sz = powers.size();
+        vector<vector<int>> prefix(sz, vector<int>(sz, 0));
+        for (int i = 0; i < sz; i++) {
+            prefix[i][i] = powers[sz - 1 - i];
+            for (int j = i + 1; j < sz; j++) {
+                prefix[i][j] = (1LL * prefix[i][j - 1] * powers[sz - 1 - j]) % MOD;
             }
         }
 
-        vector<long long> prefix(bits.size());
-        prefix[0] = bits[0] % MOD;
-        for (int i = 1; i < (int)bits.size(); i++) {
-            prefix[i] = (prefix[i - 1] * bits[i]) % MOD;
+        vector<int> res(queries.size());
+        for (int i = 0; i < (int)queries.size(); i++) {
+            res[i] = prefix[queries[i][0]][queries[i][1]];
         }
 
-        vector<int> ans;
-        for (auto &q : queries) {
-            int l = q[0], r = q[1];
-            long long product;
-            if (l == 0) {
-                product = prefix[r];
-            } 
-            else {
-                long long inv = modPow(prefix[l - 1], MOD - 2, MOD);
-                product = (prefix[r] * inv) % MOD;
-            }
-            ans.push_back((int)product);
-        }
-
-        return ans;
-    }
-
-    long long modPow(long long base, long long exp, int mod) {
-        long long res = 1;
-        while (exp > 0) {
-            if (exp & 1) res = (res * base) % mod;
-            base = (base * base) % mod;
-            exp >>= 1;
-        }
         return res;
     }
 };
