@@ -3,44 +3,27 @@ public:
     vector<vector<int>> sortMatrix(vector<vector<int>>& grid) {
         int n = grid.size();
 
-        int i = 0, j = 0, k = 0;
-        while(k < n) {
-            i = k;
-            j = 0;
-            priority_queue<int> max_priority_queue;
-            while(i < n && j < n) {
-                max_priority_queue.push(grid[i][j]);
-                i++; j++;
+        auto insertionSortDiagonal = [&](int row, int col, bool descending) {
+            int i = row, j = col;
+            while (i < n && j < n) {
+                int r = i, c = j;
+                while (r > row && c > col) {
+                    int prevR = r - 1, prevC = c - 1;
+                    if ((descending && grid[prevR][prevC] < grid[r][c]) ||
+                        (!descending && grid[prevR][prevC] > grid[r][c])) {
+                        swap(grid[prevR][prevC], grid[r][c]);
+                    } else break;
+                    r--, c--;
+                }
+                i++, j++;
             }
+        };
 
-            i = k;
-            j = 0;
-            while(i < n && j < n) {
-                grid[i][j] = max_priority_queue.top();
-                max_priority_queue.pop();
-                i++; j++;
-            }
-            k++;
-        }
-        
-        k = 1;
-        while(k < n) {
-            i = 0;
-            j = k;
-            priority_queue<int> min_priority_queue;
-            while(i < n && j < n) {
-                min_priority_queue.push(grid[i][j]);
-                i++; j++;
-            }
-            
-            i--; j--;
-            while(i >= 0 && j >= 0) {
-                grid[i][j] = min_priority_queue.top();
-                min_priority_queue.pop();
-                i--; j--;
-            }
-            k++;
-        }
+        for (int r = 0; r < n; r++)
+            insertionSortDiagonal(r, 0, true);
+
+        for (int c = 1; c < n; c++)
+            insertionSortDiagonal(0, c, false);
 
         return grid;
     }
