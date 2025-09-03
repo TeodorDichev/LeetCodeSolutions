@@ -1,33 +1,26 @@
 class Solution {
-    bool checkForOtherPoints(const vector<vector<int>>& points, int i, int j) {
-    int x1 = points[i][0], y1 = points[i][1];
-    int x2 = points[j][0], y2 = points[j][1];
-
-    for (int k = i + 1; k < j; k++) {
-        int x = points[k][0], y = points[k][1];
-        if (x >= x1 && x <= x2 && y <= y1 && y >= y2) {
-            return false;
-        }
-    }
-    
-    return true;
-}   
-
 public:
     int numberOfPairs(vector<vector<int>>& points) {
         sort(points.begin(), points.end(), [](const vector<int>& a, const vector<int>& b) {
-            if (a[0] == b[0]) 
-                return a[1] > b[1];
-            return a[0] < b[0];
+            return a[0] < b[0] || (a[0] == b[0] && a[1] > b[1]);
         });
 
         int res = 0, n = points.size();
 
-        for(int i = 0; i < n - 1; i++) {
-            for(int j = i + 1; j < n; j++) {
-                if(points[i][0] <= points[j][0] && points[i][1] >= points[j][1] 
-                    && checkForOtherPoints(points, i, j))
+        for (int i = 0; i < n - 1; i++) {
+            const auto& pointA = points[i];
+            int xMin = pointA[0] - 1;
+            int xMax = INT_MAX;
+            int yMin = INT_MIN;
+            int yMax = pointA[1] + 1;
+
+            for (int j = i + 1; j < n; j++) {
+                const auto& pointB = points[j];
+                if (pointB[0] > xMin && pointB[0] < xMax && pointB[1] > yMin && pointB[1] < yMax) {
                     res++;
+                    xMin = pointB[0];
+                    yMin = pointB[1];
+                }
             }
         }
 
