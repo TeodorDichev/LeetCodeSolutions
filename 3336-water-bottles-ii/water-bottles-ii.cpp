@@ -1,28 +1,11 @@
 class Solution {
 public:
     int maxBottlesDrunk(int numBottles, int numExchange) {
-        int fullBottles = numBottles;
-        int emptyBottles = 0;
-        int bottlesDrunk = 0;
-
-        while(fullBottles != 0 || emptyBottles >= numExchange) {
-            if(fullBottles > 0) {
-                // drink
-                bottlesDrunk += fullBottles;
-                emptyBottles += fullBottles;
-                fullBottles = 0;
-                continue;
-            }
-            
-            // exchange
-            while(emptyBottles - numExchange >= 0) {
-                emptyBottles -= numExchange;
-                numExchange++;
-                fullBottles++;
-            }
-            
-        }
-
-        return bottlesDrunk;
+        int a = 1;
+        int b = 2 * numExchange - 3;
+        int c = (-2) * numBottles;
+        double d = (double)b * b - 4.0 * a * c;
+        int t = (int)ceil((-b + sqrt(d)) / (2.0 * a));
+        return numBottles + t - 1;
     }
 };
