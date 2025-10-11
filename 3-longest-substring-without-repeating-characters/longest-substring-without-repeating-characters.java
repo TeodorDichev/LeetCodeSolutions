@@ -1,6 +1,6 @@
 class Solution {
     public int lengthOfLongestSubstring(String s) {
-        String res = "";
+        int len = 0;
 
         for(int i = 0; i < s.length(); i++) {
             StringBuilder currStr = new StringBuilder();
@@ -12,11 +12,11 @@ class Solution {
                 currStr.append(s.charAt(j));
             }
 
-            if(currStr.length() > res.length()) {
-                res = currStr.toString();
+            if(currStr.length() > len) {
+                len = currStr.length();
             }
         }
 
-        return res.length();
+        return len;
     }
 }
