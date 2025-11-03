@@ -1,39 +1,25 @@
 class Solution {
-    int getPivotIndex(vector<int>& nums) {
+    int findPivot(const vector<int>& nums) {
         int l = 0, r = nums.size() - 1;
 
-        while(l <= r) {
+        while (l < r) {
             int m = l + (r - l) / 2;
-
-            if(m + 1 >= nums.size())
-                return m;
-            else if(nums[m + 1] < nums[m])  
-                return m + 1;
-
-            if(m - 1 < 0)
-                return m;
-            else if(nums[m] < nums[m - 1])
-                return m;
-
-            if(nums[r] > nums[m])
-                r = m - 1;
-            else
+            if (nums[m] > nums[r])
                 l = m + 1;
+            else
+                r = m;
         }
 
-        return -1;
+        return l;
     }
 
-    int binarySearch(vector<int>& nums, int target, int l, int r) {
-        while(l <= r) {
+    int binarySearch(const vector<int>& nums, int l, int r, int target) {
+        while (l <= r) {
             int m = l + (r - l) / 2;
-
-            if(nums[m] == target) 
-                return m;
-
-            if(nums[m] < target)
+            if (nums[m] == target) return m;
+            if (nums[m] < target)
                 l = m + 1;
-            else 
+            else
                 r = m - 1;
         }
         return -1;
@@ -41,16 +27,14 @@ class Solution {
 
 public:
     int search(vector<int>& nums, int target) {
-        int pivotIndex = getPivotIndex(nums);
-        int start = 0, end = pivotIndex, startSec = pivotIndex, endSec = nums.size() - 1;
-        int res1 = binarySearch(nums, target, start, end);
-        int res2 = binarySearch(nums, target, startSec, endSec);
+        int n = nums.size();
+        if (n == 0) return -1;
 
-        if(res1 == -1 && res2 == -1)
-            return -1;
-        else if(res1 == -1)
-            return res2;
-        else 
-            return res1;
+        int pivot = findPivot(nums);
+
+        if (target >= nums[pivot] && target <= nums[n - 1])
+            return binarySearch(nums, pivot, n - 1, target);
+        else
+            return binarySearch(nums, 0, pivot - 1, target);
     }
 };
