@@ -17,7 +17,7 @@ public:
                 return nums[m];
 
             if(nums[r] > nums[m])
-                r = m;
+                r = m - 1;
             else
                 l = m + 1;
         }
