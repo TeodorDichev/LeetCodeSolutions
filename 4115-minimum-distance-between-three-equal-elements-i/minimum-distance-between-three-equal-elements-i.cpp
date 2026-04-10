@@ -17,7 +17,7 @@ public:
                 continue;
             }
 
-            sort(kvp.second.begin(), kvp.second.end());
+            // sort(kvp.second.begin(), kvp.second.end());
             for (int j = 2; j < kvp.second.size(); j++) {
                 minDist = min(minDist, calcDist(kvp.second[j-2], kvp.second[j-1], kvp.second[j]));
             }
