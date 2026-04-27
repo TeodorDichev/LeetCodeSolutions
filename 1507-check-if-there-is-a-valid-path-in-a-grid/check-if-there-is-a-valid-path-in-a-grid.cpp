@@ -46,14 +46,17 @@ class Solution {
     }
 
     void dfs(int i, int j, vector<vector<int>>& grid, vector<vector<bool>>& visited) {
-        cout << i << " " << j << "\n";
+        // cout << i << " " << j << "\n";
         if (visited[i][j]) {
             return;
         }
 
         visited[i][j] = true;
         for (auto [x, y] : calcNextPos(i, j, grid[i][j])) {
-            if (isPosValid(x, y, grid.size(), grid[0].size()) && !visited[x][y] && isConnected(x, y, i, j, grid)) {
+            if (isPosValid(x, y, grid.size(), grid[0].size()) && 
+                !visited[x][y] && 
+                isConnected(x, y, i, j, grid)) {
+
                 dfs(x, y, grid, visited);
             }
         }
