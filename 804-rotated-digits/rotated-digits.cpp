@@ -1,33 +1,26 @@
 class Solution {
-    unordered_set<int> getDigits(int n) {
-        unordered_set<int> res;
-        while (n > 0) {
-            res.insert(n % 10);
-            n /= 10;
-        }
-
-        return res;
-    }
-
 public:
     int rotatedDigits(int n) {
-        unordered_set<int> validDigits = {0,1,2,5,6,8,9};
-        unordered_set<int> goodDigits = {2,5,6,9};
+        vector<int> dp(n + 1, 0);
         int res = 0;
 
-        for (int i = 1; i <= n; i++) {
-            bool atLeastOneGoodDigit = false;
-            for (int digit : getDigits(i)) {
-                if (!validDigits.contains(digit)) {
-                    atLeastOneGoodDigit = false;
-                    break;
+        for (int i = 0; i <= n; i++) {
+            if (i < 10) {
+                if (i == 0 || i == 1 || i == 8) dp[i] = 1;
+                else if (i == 2 || i == 5 || i == 6 || i == 9) {
+                    dp[i] = 2;
+                    res++;
                 }
-                if (!atLeastOneGoodDigit && goodDigits.contains(digit)) {
-                    atLeastOneGoodDigit = true;
-                }
-            }
-            if (atLeastOneGoodDigit) {
-                res++;
+                else dp[i] = 0;
+            } else {
+                int a = dp[i / 10];
+                int b = dp[i % 10];
+
+                if (a == 1 && b == 1) dp[i] = 1;
+                else if (a >= 1 && b >= 1) {
+                    dp[i] = 2;
+                    res++;
+                } else dp[i] = 0;
             }
         }
 
