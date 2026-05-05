@@ -17,12 +17,14 @@ public:
         ListNode* p1 = head, *p2 = head;
         for(int i = 0; i < k; i++){
             if(p1->next) p1 = p1->next;
-            else{
-                k = k%(i+1);
+            else {
+                cout << i;
+                k = k % (i+1);
                 i = -1; 
                 p1 = head;
             }
         }
+        
         while(p1->next!=NULL){
             p1 = p1->next;
             p2 = p2->next;
